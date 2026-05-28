@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="博客文章">
+  <title>文章 — Breeze</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+  <div class="page-wrap">
+  <a href="#main" class="skip-link" data-i18n="skipToMain">跳到主要内容</a>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Breeze</a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-i18n="navHome">首页</a></li>
+        <li><a href="blog.html" data-i18n="navBlog">文章</a></li>
+        <li><a href="archive.html" data-i18n="navArchive">归档</a></li>
+        <li><a href="about.html" data-i18n="navAbout">关于</a></li>
+        <li><a href="admin.html" class="admin-only" data-i18n="navAdmin">管理</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main" class="main-top-pad">
+    <!-- TOC desktop sidebar -->
+    <div class="toc-wrapper" id="tocWrapper">
+      <div class="toc-inner" id="tocInner"></div>
+    </div>
+
+    <!-- TOC mobile -->
+    <button type="button" class="toc-toggle" id="tocMobileToggle" aria-label="Table of Contents">
+      <svg viewBox="0 0 24 24"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/></svg>
+    </button>
+    <div class="toc-mobile-panel" id="tocMobilePanel">
+      <div class="toc-inner" id="tocMobileInner"></div>
+    </div>
+
+    <!-- Article -->
+    <article class="article" id="postArticle">
+      <div class="article-inner">
+      <div class="article-header">
+        <h1 id="postTitle">加载中...</h1>
+        <div class="article-meta">
+          <span id="postDate"></span>
+          <span class="dot"></span>
+          <span id="postCategory"></span>
+          <span class="dot" id="readingTimeDot" style="display:none"></span>
+          <span id="postReadingTime"></span>
+          <span id="postWordCount"></span>
+        </div>
+      </div>
+      <p class="article-excerpt" id="postExcerpt"></p>
+      <div class="article-content" id="postContent"></div>
+      </div>
+    </article>
+
+    <!-- 404 -->
+    <div class="article" id="postNotFound" style="display:none">
+      <div class="article-inner">
+      <div class="article-header">
+        <h1>404</h1>
+        <p>文章未找到</p>
+      </div>
+      </div>
+    </div>
+
+    <!-- Tags & Back -->
+    <div class="article-footer" id="postFooter" style="display:none">
+      <div class="article-tags" id="postTags"></div>
+      <a href="blog.html" class="article-back">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <span data-i18n="backToBlog">返回文章列表</span>
+      </a>
+    </div>
+
+    <!-- Related Posts -->
+    <div class="related-section" id="relatedSection" style="display:none">
+      <h2 data-i18n="relatedPosts">相关文章</h2>
+      <div class="related-grid" id="relatedPosts"></div>
+    </div>
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="index.html" data-i18n="navHome">首页</a></li>
+        <li><a href="blog.html" data-i18n="navBlog">文章</a></li>
+        <li><a href="archive.html" data-i18n="navArchive">归档</a></li>
+        <li><a href="about.html" data-i18n="navAbout">关于</a></li>
+      </ul>
+      <p data-i18n="footerCopyright">© 2026 Breeze. All rights reserved.</p>
+    </div>
+  </footer>
+
+  </div>
+  <script src="js/utils.js?v=4"></script>
+  <script src="js/store.js?v=4"></script>
+  <script src="js/main.js?v=4"></script>
+  <script src="js/post.js?v=4"></script>
+</body>
+</html>

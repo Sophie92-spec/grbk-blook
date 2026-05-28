@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="管理后台">
+  <title>管理 — Breeze</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body class="admin-page">
+  <div class="page-wrap">
+  <a href="#main" class="skip-link" data-i18n="skipToMain">跳到主要内容</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Breeze</a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-i18n="navHome">首页</a></li>
+        <li><a href="blog.html" data-i18n="navBlog">文章</a></li>
+        <li><a href="archive.html" data-i18n="navArchive">归档</a></li>
+        <li><a href="about.html" data-i18n="navAbout">关于</a></li>
+        <li><a href="admin.html" aria-current="page" data-i18n="navAdmin">管理</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main" class="main-top-pad">
+    <div class="admin-header-section">
+      <h2 class="admin-page-title" data-i18n="navAdmin">管理</h2>
+    </div>
+    <div id="adminApp"></div>
+  </main>
+
+  <!-- Delete Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+      <h2 data-i18n="confirmDelete">确认删除</h2>
+      <p data-i18n="deleteConfirmMsg">确定要删除这篇文章吗？此操作无法撤销。</p>
+      <div class="modal-actions">
+        <button type="button" class="admin-btn" id="deleteCancel" data-i18n="cancel">取消</button>
+        <button type="button" class="admin-btn admin-btn-primary" id="deleteConfirm" style="background:var(--color-warm)" data-i18n="deletePost">删除</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="index.html" data-i18n="navHome">首页</a></li>
+        <li><a href="blog.html" data-i18n="navBlog">文章</a></li>
+        <li><a href="archive.html" data-i18n="navArchive">归档</a></li>
+        <li><a href="about.html" data-i18n="navAbout">关于</a></li>
+      </ul>
+      <p data-i18n="footerCopyright">© 2026 Breeze. All rights reserved.</p>
+    </div>
+  </footer>
+
+  </div>
+  <script src="js/utils.js?v=4"></script>
+  <script src="js/store.js?v=4"></script>
+  <script src="js/main.js?v=4"></script>
+  <script src="js/admin.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sophie 的个人博客 — 用代码构建想法，用文字记录生活。">
+  <title>Breeze — Sophie 的博客</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+</head>
+<body>
+  <div class="page-wrap">
+  <a href="#main" class="skip-link" data-i18n="skipToMain">跳到主要内容</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-current="page">Breeze</a>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" aria-current="page" data-i18n="navHome">首页</a></li>
+        <li><a href="blog.html" data-i18n="navBlog">文章</a></li>
+        <li><a href="archive.html" data-i18n="navArchive">归档</a></li>
+        <li><a href="about.html" data-i18n="navAbout">关于</a></li>
+        <li><a href="admin.html" class="admin-only" data-i18n="navAdmin">管理</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="masthead-bg">
+      <img src="images/海边动漫少女.png" alt="">
+      <div class="masthead-overlay"></div>
+    </div>
+    <div class="masthead-content">
+      <h1 class="masthead-title">Breeze</h1>
+      <p class="masthead-sub">Sophie's Blog</p>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="home-sections">
+      <section class="home-section">
+        <h2 class="section-label"><span data-i18n="featuredPost">精选</span></h2>
+        <div class="featured-row">
+          <article class="featured-card" id="homeFeatured">
+            <span class="featured-badge" id="featuredTag"></span>
+            <h3 class="featured-title"><a href="" id="featuredLink">Loading...</a></h3>
+            <div class="featured-date" id="featuredDate"></div>
+            <p class="featured-excerpt" id="featuredExcerpt"></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="home-section">
+        <h2 class="section-label"><span data-i18n="recentPosts">最新</span></h2>
+        <ul class="latest-list" id="homeLatestList"></ul>
+        <a href="blog.html" class="section-link" data-i18n="viewAll">查看全部文章 →</a>
+      </section>
+    </div>
+
+    <div class="home-info">
+      <div class="home-info-card">
+        <div class="label">Local Time</div>
+        <div class="value" id="homeClock">00:00</div>
+      </div>
+      <div class="home-info-card">
+        <div class="label" data-i18n="siteLaunch">上线天数</div>
+        <div class="value" id="homeDays">0</div>
+        <div class="desc">days</div>
+      </div>
+      <div class="home-info-card">
+        <div class="label" data-i18n="posts">文章</div>
+        <div class="value" id="homePostCount">0</div>
+      </div>
+      <div class="home-info-card">
+        <div class="label">Daily Quote</div>
+        <div class="home-quote-text" id="homeQuoteText"></div>
+        <button type="button" class="home-quote-btn" id="homeQuoteBtn">↻</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <ul class="footer-links">
+        <li><a href="index.html" data-i18n="navHome">首页</a></li>
+        <li><a href="blog.html" data-i18n="navBlog">文章</a></li>
+        <li><a href="archive.html" data-i18n="navArchive">归档</a></li>
+        <li><a href="about.html" data-i18n="navAbout">关于</a></li>
+      </ul>
+      <p data-i18n="footerCopyright">© 2026 Breeze. All rights reserved.</p>
+    </div>
+  </footer>
+
+  </div>
+  <script src="js/utils.js?v=4"></script>
+  <script src="js/store.js?v=4"></script>
+  <script src="js/main.js?v=4"></script>
+  <script src="js/home.js?v=4"></script>
+</body>
+</html>
