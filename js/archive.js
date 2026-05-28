@@ -1,6 +1,6 @@
 /**
  * Breeze Blog — Archive Page
- * Dual-column timeline grouped by year then month.
+ * Block list with year stripes.
  */
 (function () {
   'use strict';
@@ -21,7 +21,6 @@
     var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    // Group by year → month
     var years = {};
     posts.forEach(function (p) {
       var parts = p.date ? p.date.split('.') : [];
@@ -34,38 +33,24 @@
     });
 
     var html = '';
-    Object.keys(years).sort().reverse().forEach(function (year) {
-      html += '<div class="archive-year">'
-        + '<h2 class="archive-year-title">' + year + '</h2>';
+    var yearKeys = Object.keys(years).sort().reverse();
 
-      Object.keys(years[year]).sort().reverse().forEach(function (month) {
+    yearKeys.forEach(function (year) {
+      var months = Object.keys(years[year]).sort().reverse();
+
+      html += '<div class="barch"><div class="barch-strip"></div><div class="barch-body">'
+        + '<div class="barch-year">' + year + '</div>';
+
+      months.forEach(function (month) {
         var postsInMonth = years[year][month];
-        html += '<div class="archive-month">'
-          + '<h3 class="archive-month-title">' + monthNames[parseInt(month) - 1] + '</h3>';
-
         postsInMonth.forEach(function (p) {
-          var dateDisplay = p.date;
-          if (p.date) {
-            var d = p.date.split('.');
-            if (d.length === 3) {
-              dateDisplay = monthNames[parseInt(d[1]) - 1] + ' ' + parseInt(d[2]);
-            }
-          }
-          html += '<div class="archive-row">'
-            + '<div class="archive-row-left">'
-            + '<span class="archive-row-date">' + BlogUtils.esc(dateDisplay) + '</span>'
-            + '</div>'
-            + '<div class="archive-row-right">'
-            + '<a href="post.html?slug=' + encodeURIComponent(p.slug) + '" class="archive-row-title">' + BlogUtils.esc(p.title) + '</a>'
-            + '<span class="archive-row-cat">' + BlogUtils.esc(p.category || '') + '</span>'
-            + '</div>'
-            + '</div>';
+          var day = p.date ? p.date.split('.')[2] : '';
+          var dateStr = monthNames[parseInt(month) - 1] + ' ' + day;
+          html += '<div class="barch-post"><span class="barch-d">' + dateStr + '</span><a href="post.html?slug=' + encodeURIComponent(p.slug) + '" class="barch-t">' + BlogUtils.esc(p.title) + '</a></div>';
         });
-
-        html += '</div>';
       });
 
-      html += '</div>';
+      html += '</div></div>';
     });
 
     container.innerHTML = html;

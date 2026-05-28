@@ -162,6 +162,9 @@ var BlogUtils = (function () {
       saveSuccess: '保存成功',
       deleteSuccess: '删除成功',
       createSuccess: '创建成功',
+      settings: '设置',
+      adminPassword: '管理员密码',
+      passwordHint: '修改密码后，下次登录请使用新密码。',
     },
     'en': {
       navHome: 'Home',
@@ -216,6 +219,9 @@ var BlogUtils = (function () {
       saveSuccess: 'Saved successfully',
       deleteSuccess: 'Deleted successfully',
       createSuccess: 'Created successfully',
+      settings: 'Settings',
+      adminPassword: 'Admin Password',
+      passwordHint: 'Use the new password on your next login.',
     }
   };
 

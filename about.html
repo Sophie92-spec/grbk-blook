@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="stylesheet" href="css/style.css?v=5">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
 </head>
 <body>
@@ -32,36 +32,50 @@
   </nav>
 
   <main id="main">
-  <!-- Masthead -->
-  <header class="masthead">
-    <div class="masthead-bg">
-      <img src="images/海边动漫少女.png" alt="">
-      <div class="masthead-overlay"></div>
+
+    <div class="page-hero">
+      <h1 class="page-hero-title">关于</h1>
+      <p class="page-hero-sub">About</p>
     </div>
-    <div class="masthead-content">
-      <h1 class="masthead-title">Breeze</h1>
-      <p class="masthead-sub">Sophie's Blog</p>
-    </div>
-  </header>
 
-    <article class="about-page">
-      <h2 class="about-page-title">关于</h2>
-      <div class="about-content">
-        <p>你好，欢迎来到我的小角落！🎈</p>
-
-        <p>我是 Sophie，一个刚刚入门的编程爱好者。充满好奇，不断探索，这个博客是我的练手项目，也是记录成长的地方。</p>
-
-        <h3>关于这个博客</h3>
-
-        <p>纯静态 HTML/CSS/JS 构建 —— 没有框架，没有后端。从设计到代码全部由我独立完成。还有很多可以改进的地方，但每一个小修复都让我很开心。</p>
-
-        <p>有建议或者只是想打个招呼？给我发邮件：</p>
-
-        <p class="about-email"><a href="mailto:v911742421@163.com">v911742421@163.com</a></p>
+    <div class="qa">
+      <div class="qa-avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="46" fill="var(--color-accent-dim)"/>
+          <circle cx="50" cy="34" r="15" fill="var(--color-accent)"/>
+          <ellipse cx="50" cy="74" rx="28" ry="20" fill="var(--color-accent)"/>
+        </svg>
       </div>
-    </article>
+      <h2 class="qa-name">Sophie</h2>
 
-    <!-- Visit info (populated by about.js) -->
+      <div class="qa-q">
+        <div class="qa-q-mark">Q</div>
+        <div class="qa-q-text">你是谁？</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-mark">A</div>
+        <div class="qa-a-text">一个在学前端开发的编程爱好者，正在用代码搭建自己的小世界。</div>
+      </div>
+
+      <div class="qa-q">
+        <div class="qa-q-mark">Q</div>
+        <div class="qa-q-text">这个博客是什么？</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-mark">A</div>
+        <div class="qa-a-text">一个纯静态个人博客，从设计到代码全部自己完成。没有框架，没有后端，只有 HTML/CSS/JS。</div>
+      </div>
+
+      <div class="qa-q">
+        <div class="qa-q-mark">Q</div>
+        <div class="qa-q-text">怎么联系你？</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-a-mark">A</div>
+        <div class="qa-a-text"><a href="mailto:v911742421@163.com">v911742421@163.com</a></div>
+      </div>
+    </div>
+
     <div class="about-visit-info" id="aboutVisitInfo"></div>
   </main>
 

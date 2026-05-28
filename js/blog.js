@@ -1,6 +1,6 @@
 /**
  * Breeze Blog — Blog Listing
- * Dual-column layout with date/category on left, title/excerpt on right.
+ * Minimal list style with bold titles.
  */
 (function () {
   'use strict';
@@ -13,6 +13,16 @@
   if (!grid) return;
 
   var currentCategory = '';
+
+  var CAT_COLORS = {
+    '生活': '#e88ca5',
+    '技术': '#7ec8e0',
+    '设计': '#d4a76a',
+  };
+
+  function getCatColor(cat) {
+    return CAT_COLORS[cat] || 'var(--color-accent)';
+  }
 
   function renderPosts() {
     var posts = BlogStore.getPublishedPosts();
@@ -39,11 +49,17 @@
 
     var html = '';
     posts.forEach(function (p) {
-      html += '<article class="post-card">'
-        + '<span class="cat-badge">' + BlogUtils.esc(p.category || '') + '</span>'
-        + '<div class="card-date">' + BlogUtils.esc(p.date) + '</div>'
-        + '<h2><a href="post.html?slug=' + encodeURIComponent(p.slug) + '">' + BlogUtils.esc(p.title) + '</a></h2>'
-        + '<p class="card-excerpt">' + BlogUtils.esc(p.excerpt || '') + '</p>'
+      var color = getCatColor(p.category);
+      html += '<article class="blist" style="--c:' + color + '">'
+        + '<div class="blist-bar"></div>'
+        + '<div class="blist-body">'
+        + '<div class="blist-meta">'
+        + '<span class="blist-cat">' + BlogUtils.esc(p.category || '') + '</span>'
+        + '<span class="blist-date">' + BlogUtils.esc(p.date) + '</span>'
+        + '</div>'
+        + '<h2 class="blist-title"><a href="post.html?slug=' + encodeURIComponent(p.slug) + '">' + BlogUtils.esc(p.title) + '</a></h2>'
+        + '<p class="blist-excerpt">' + BlogUtils.esc(p.excerpt || '') + '</p>'
+        + '</div>'
         + '</article>';
     });
     grid.innerHTML = html;

@@ -5,7 +5,7 @@
 var BlogAdmin = (function () {
   'use strict';
 
-  var ADMIN_PASSWORD = 'breeze2026';
+  var ADMIN_PASSWORD = localStorage.getItem('breeze_admin_pwd') || 'breeze2026';
   var container = document.getElementById('adminApp');
   if (!container) return {};
 
@@ -60,6 +60,7 @@ var BlogAdmin = (function () {
       + '<div class="admin-header-actions">'
       + '<a href="index.html" class="admin-btn">' + BlogUtils.t('navHome') + '</a>'
       + '<button type="button" class="admin-btn admin-btn-primary" id="adminNewBtn">+ ' + BlogUtils.t('newPost') + '</button>'
+      + '<button type="button" class="admin-btn" id="adminSettingsBtn">⚙ ' + BlogUtils.t('settings') + '</button>'
       + '<button type="button" class="admin-btn" id="adminLogoutBtn">' + BlogUtils.t('logout') + '</button>'
       + '</div>'
       + '</div>';
@@ -101,6 +102,8 @@ var BlogAdmin = (function () {
       showLogin();
     });
 
+    document.getElementById('adminSettingsBtn').addEventListener('click', showSettings);
+
     container.querySelectorAll('[data-edit]').forEach(function (el) {
       el.addEventListener('click', function () { showEditor(el.getAttribute('data-edit')); });
     });
@@ -111,7 +114,40 @@ var BlogAdmin = (function () {
   }
 
   /* ──────────────────────────────────────────────
-     Editor View
+     Settings View
+     ────────────────────────────────────────────── */
+  function showSettings() {
+    var html = '<div class="admin-editor">'
+      + '<div class="admin-editor-header">'
+      + '<h1>' + BlogUtils.t('settings') + '</h1>'
+      + '<button type="button" class="admin-btn" id="settingsBack">← ' + BlogUtils.t('dashboard') + '</button>'
+      + '</div>'
+      + '<div class="editor-form">'
+      + '<div class="field"><label for="settingsPassword">' + BlogUtils.t('adminPassword') + '</label>'
+      + '<input type="text" id="settingsPassword" value="' + BlogUtils.escAttr(ADMIN_PASSWORD) + '"></div>'
+      + '<p style="font-size:13px;color:var(--color-text-muted);margin-bottom:16px">' + BlogUtils.t('passwordHint') + '</p>'
+      + '<div class="editor-actions">'
+      + '<button type="button" class="admin-btn admin-btn-primary" id="settingsSave">' + BlogUtils.t('save') + '</button>'
+      + '</div></div></div>';
+
+    container.innerHTML = html;
+
+    document.getElementById('settingsBack').addEventListener('click', showDashboard);
+
+    document.getElementById('settingsSave').addEventListener('click', function () {
+      var newPwd = document.getElementById('settingsPassword').value.trim();
+      if (!newPwd) {
+        BlogUtils.showToast('密码不能为空', 'error');
+        return;
+      }
+      localStorage.setItem('breeze_admin_pwd', newPwd);
+      ADMIN_PASSWORD = newPwd;
+      BlogUtils.showToast('密码已更新');
+    });
+  }
+
+  /* ──────────────────────────────────────────────
+     Editor View — completely redesigned
      ────────────────────────────────────────────── */
   function showEditor(postId) {
     editingId = postId || null;
@@ -127,73 +163,107 @@ var BlogAdmin = (function () {
     var published = post ? post.published : true;
     var cats = BlogStore.getCategories();
 
-    var html = '<div class="admin-editor">'
-      + '<div class="admin-editor-header">'
-      + '<h1>' + (editingId ? BlogUtils.t('editPostTitle') : BlogUtils.t('newPost')) + '</h1>'
-      + '<button type="button" class="admin-btn" id="editorBack">← ' + BlogUtils.t('dashboard') + '</button>'
+    var html = '<div class="write-wrap">'
+
+      // Top bar
+      + '<div class="write-bar">'
+      + '<button type="button" class="write-bar-btn" id="editorBack">← ' + BlogUtils.t('dashboard') + '</button>'
+      + '<span class="write-bar-title">' + (editingId ? BlogUtils.t('editPostTitle') : BlogUtils.t('newPost')) + '</span>'
+      + '<div class="write-bar-actions">'
+      + '<button type="button" class="write-btn write-btn-primary" id="editorSave">' + BlogUtils.t('save') + '</button>'
       + '</div>'
-      + '<div class="editor-form">';
-
-    // Title
-    html += '<div class="field"><label for="editTitle">' + BlogUtils.t('postTitle') + '</label><input type="text" id="editTitle" value="' + BlogUtils.escAttr(title) + '"></div>';
-
-    // Row: slug, date, published toggle
-    html += '<div class="field-row-3">'
-      + '<div class="field"><label for="editSlug">Slug</label><div class="slug-wrap"><input type="text" id="editSlug" value="' + BlogUtils.escAttr(slug) + '"><button type="button" class="slug-btn" id="slugRefresh" title="从标题生成">↻</button></div></div>'
-      + '<div class="field"><label for="editDate">' + BlogUtils.t('postDate') + '</label><input type="date" id="editDate" value="' + BlogUtils.escAttr(date) + '"></div>'
-      + '<div class="field field-check" style="padding-top:22px">'
-      + '<input type="checkbox" id="editPublished"' + (published ? ' checked' : '') + '>'
-      + '<label for="editPublished">' + BlogUtils.t('postPublished') + '</label>'
       + '</div>'
-      + '</div>';
 
-    // Category as chips
-    html += '<div class="field"><label>' + BlogUtils.t('postCategory') + '</label><div class="cat-chips" id="catChips">';
+      // Title
+      + '<div class="write-title-wrap">'
+      + '<input type="text" id="editTitle" class="write-title-input" placeholder="输入文章标题..." value="' + BlogUtils.escAttr(title) + '">'
+      + '</div>'
+
+      // Toolbar
+      + '<div class="write-toolbar" id="editorToolbar">'
+      + '<button type="button" data-cmd="h2" title="二级标题"><span style="font-weight:700;font-size:13px">H2</span></button>'
+      + '<button type="button" data-cmd="h3" title="三级标题"><span style="font-weight:600;font-size:12px">H3</span></button>'
+      + '<span class="write-toolbar-sep"></span>'
+      + '<button type="button" data-cmd="bold" title="粗体"><b>B</b></button>'
+      + '<button type="button" data-cmd="italic" title="斜体"><i>I</i></button>'
+      + '<span class="write-toolbar-sep"></span>'
+      + '<button type="button" data-cmd="blockquote" title="引用">❝</button>'
+      + '<button type="button" data-cmd="link" title="链接">🔗</button>'
+      + '<span class="write-toolbar-sep"></span>'
+      + '<button type="button" data-cmd="code" title="行内代码">&lt;/&gt;</button>'
+      + '<button type="button" data-cmd="pre" title="代码块">◧</button>'
+      + '<span class="write-toolbar-sep"></span>'
+      + '<button type="button" data-cmd="ul" title="无序列表">•</button>'
+      + '<button type="button" data-cmd="ol" title="有序列表">1.</button>'
+      + '<span class="write-toolbar-sep"></span>'
+      + '<button type="button" data-cmd="img" title="插入图片">🖼</button>'
+      + '<button type="button" data-cmd="preview" title="预览">👁</button>'
+      + '</div>'
+
+      // Content
+      + '<div class="write-content-wrap">'
+      + '<textarea id="editContent" class="write-content-input" placeholder="开始写作..." rows="18">' + BlogUtils.esc(content) + '</textarea>'
+      + '</div>'
+
+      // Meta toggle
+      + '<div class="write-meta-toggle" id="metaToggle">'
+      + '<span>▼ ' + BlogUtils.t('postCategory') + ' · ' + BlogUtils.t('postDate') + ' · ' + BlogUtils.t('postTags') + '</span>'
+      + '</div>'
+
+      // Meta panel (collapsible)
+      + '<div class="write-meta" id="writeMeta" style="display:none">'
+      + '<div class="write-meta-grid">'
+
+      // Left column
+      + '<div class="write-meta-col">'
+      + '<div class="write-meta-field"><label>' + BlogUtils.t('postCategory') + '</label><div class="cat-chips" id="catChips">';
     cats.forEach(function (c) {
       var active = c === category ? ' active' : '';
       html += '<button type="button" class="cat-chip' + active + '" data-cat="' + BlogUtils.escAttr(c) + '">' + BlogUtils.esc(c) + '</button>';
     });
-    html += '<button type="button" class="cat-chip cat-chip-add" id="catChipAdd">+</button></div>';
-    html += '<div class="cat-new" id="catNewWrap" style="display:none"><input type="text" id="editNewCategory" placeholder="新分类名称" value="' + (cats.indexOf(category) === -1 && category ? BlogUtils.escAttr(category) : '') + '"></div></div>';
+    html += '<span class="cat-add-wrap" id="catAddWrap">'
+      + '<button type="button" class="cat-chip-add" id="catChipAdd">+ 新建</button>'
+      + '<span class="cat-add-input" id="catAddInput" style="display:none">'
+      + '<input type="text" id="editNewCategory" placeholder="新分类名称" value="' + (cats.indexOf(category) === -1 && category ? BlogUtils.escAttr(category) : '') + '">'
+      + '<button type="button" id="catConfirmBtn">✓</button>'
+      + '</span>'
+      + '</span></div>'
+      + '</div>'
 
-    // Excerpt
-    html += '<div class="field"><label for="editExcerpt">' + BlogUtils.t('postExcerpt') + '</label><textarea id="editExcerpt" rows="3">' + BlogUtils.esc(excerpt) + '</textarea></div>';
+      + '<div class="write-meta-field"><label>' + BlogUtils.t('postTags') + '</label><input type="text" id="editTags" class="write-meta-input" placeholder="标签1, 标签2, ..." value="' + BlogUtils.escAttr(tags) + '"></div>'
 
-    // Tags
-    html += '<div class="field"><label for="editTags">' + BlogUtils.t('postTags') + ' (comma separated)</label><input type="text" id="editTags" value="' + BlogUtils.escAttr(tags) + '"></div>';
+      + '<div class="write-meta-field"><label for="editExcerpt">' + BlogUtils.t('postExcerpt') + '</label><textarea id="editExcerpt" class="write-meta-input write-meta-textarea" rows="2" placeholder="简短的文章摘要...">' + BlogUtils.esc(excerpt) + '</textarea></div>'
+      + '</div>'
 
-    // Content toolbar
-    html += '<div class="field"><label>' + BlogUtils.t('postContent') + '</label>'
-      + '<div class="editor-toolbar" id="editorToolbar">'
-      + '<button type="button" data-cmd="h2" title="二级标题">H2</button>'
-      + '<button type="button" data-cmd="h3" title="三级标题">H3</button>'
-      + '<div class="sep"></div>'
-      + '<button type="button" data-cmd="bold" title="粗体"><b>B</b></button>'
-      + '<button type="button" data-cmd="italic" title="斜体"><i>I</i></button>'
-      + '<button type="button" data-cmd="blockquote" title="引用">"</button>'
-      + '<div class="sep"></div>'
-      + '<button type="button" data-cmd="code" title="行内代码">&lt;/&gt;</button>'
-      + '<button type="button" data-cmd="pre" title="代码块">#</button>'
-      + '<div class="sep"></div>'
-      + '<button type="button" data-cmd="ul" title="无序列表">•</button>'
-      + '<button type="button" data-cmd="ol" title="有序列表">1.</button>'
-      + '<div class="sep"></div>'
-      + '<button type="button" data-cmd="link" title="插入链接">🔗</button>'
-      + '<button type="button" data-cmd="img" title="插入图片">🖼</button>'
-      + '<div class="sep"></div>'
-      + '<button type="button" data-cmd="preview" title="预览">👁</button>'
-      + '</div>';
+      // Right column
+      + '<div class="write-meta-col">'
+      + '<div class="write-meta-field"><label for="editSlug">Slug</label><div class="write-slug"><input type="text" id="editSlug" class="write-meta-input" placeholder="文章链接标识，如 my-post-title" value="' + BlogUtils.escAttr(slug) + '"><button type="button" class="write-slug-btn" id="slugRefresh" title="从标题生成">↻</button></div></div>'
+      + '<div class="write-meta-field"><label for="editDate">' + BlogUtils.t('postDate') + '</label><input type="date" id="editDate" class="write-meta-input" value="' + BlogUtils.escAttr(date) + '"></div>'
+      + '<div class="write-meta-field">'
+      + '<label class="write-toggle-label"><input type="checkbox" id="editPublished"' + (published ? ' checked' : '') + '><span class="write-toggle-track"></span>' + BlogUtils.t('postPublished') + '</label>'
+      + '</div>'
+      + '</div>'
 
-    html += '<div class="editor-content"><textarea id="editContent" rows="15">' + BlogUtils.esc(content) + '</textarea></div></div>';
+      + '</div></div>'  // close meta-grid, meta
 
-    // Actions
-    html += '<div class="editor-actions">'
-      + '<button type="button" class="admin-btn" id="editorCancel">' + BlogUtils.t('cancel') + '</button>'
-      + '<button type="button" class="admin-btn admin-btn-primary" id="editorSave">' + BlogUtils.t('save') + '</button>'
-      + '</div>';
+      + '</div>';  // close write-wrap
 
-    html += '</div></div>';
     container.innerHTML = html;
+
+    // ── Events ──
+
+    // Meta toggle
+    var metaToggle = document.getElementById('metaToggle');
+    var writeMeta = document.getElementById('writeMeta');
+    if (metaToggle && writeMeta) {
+      metaToggle.addEventListener('click', function () {
+        var isOpen = writeMeta.style.display !== 'none';
+        writeMeta.style.display = isOpen ? 'none' : 'block';
+        metaToggle.innerHTML = isOpen
+          ? '<span>▶ ' + BlogUtils.t('postCategory') + ' · ' + BlogUtils.t('postDate') + ' · ' + BlogUtils.t('postTags') + '</span>'
+          : '<span>▼ ' + BlogUtils.t('postCategory') + ' · ' + BlogUtils.t('postDate') + ' · ' + BlogUtils.t('postTags') + '</span>';
+      });
+    }
 
     // Form dirty tracking
     var formDirty = false;
@@ -206,30 +276,84 @@ var BlogAdmin = (function () {
 
     // Category chips
     var catChips = document.getElementById('catChips');
-    var catNewWrap = document.getElementById('catNewWrap');
+    var catAddWrap = document.getElementById('catAddWrap');
+    var catAddBtn = document.getElementById('catChipAdd');
+    var catAddInput = document.getElementById('catAddInput');
+    var catInput = document.getElementById('editNewCategory');
+    var catConfirmBtn = document.getElementById('catConfirmBtn');
     var selectedCat = category;
+
+    // Show the input if there's a custom category not in the list
+    if (category && cats.indexOf(category) === -1) {
+      catAddBtn.style.display = 'none';
+      catAddInput.style.display = '';
+      catInput.value = category;
+      catInput.focus();
+    }
+
+    function addCategoryChip(name) {
+      name = name.trim();
+      if (!name) return;
+      var existing = catChips.querySelector('.cat-chip[data-cat="' + BlogUtils.escAttr(name) + '"]');
+      if (existing) {
+        catChips.querySelectorAll('.cat-chip').forEach(function (c) { c.classList.remove('active'); });
+        existing.classList.add('active');
+        selectedCat = name;
+        catInput.value = '';
+        catAddBtn.style.display = '';
+        catAddInput.style.display = 'none';
+        return;
+      }
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'cat-chip active';
+      chip.setAttribute('data-cat', name);
+      chip.textContent = name;
+      catChips.insertBefore(chip, catAddWrap);
+      catChips.querySelectorAll('.cat-chip.active').forEach(function (c) {
+        if (c !== chip) c.classList.remove('active');
+      });
+      selectedCat = name;
+      catInput.value = '';
+      catAddBtn.style.display = '';
+      catAddInput.style.display = 'none';
+    }
 
     if (catChips) {
       catChips.addEventListener('click', function (e) {
         var chip = e.target.closest('.cat-chip');
         if (!chip) return;
-
-        if (chip.classList.contains('cat-chip-add')) {
-          catNewWrap.style.display = catNewWrap.style.display === 'none' ? '' : 'none';
-          if (catNewWrap.style.display !== 'none') {
-            document.getElementById('editNewCategory').focus();
-          }
-          return;
-        }
-
         catChips.querySelectorAll('.cat-chip').forEach(function (c) { c.classList.remove('active'); });
         chip.classList.add('active');
         selectedCat = chip.getAttribute('data-cat');
-        catNewWrap.style.display = 'none';
+        catAddBtn.style.display = '';
+        catAddInput.style.display = 'none';
+      });
+
+      catAddBtn.addEventListener('click', function () {
+        catAddBtn.style.display = 'none';
+        catAddInput.style.display = '';
+        catInput.focus();
+      });
+
+      catConfirmBtn.addEventListener('click', function () {
+        addCategoryChip(catInput.value);
+      });
+
+      catInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addCategoryChip(catInput.value);
+        }
+        if (e.key === 'Escape') {
+          catAddBtn.style.display = '';
+          catAddInput.style.display = 'none';
+          catInput.value = '';
+        }
       });
     }
 
-    // Slug auto-generate from title
+    // Slug auto-generate
     var slugBtn = document.getElementById('slugRefresh');
     var titleInput = document.getElementById('editTitle');
     var slugInput = document.getElementById('editSlug');
@@ -252,7 +376,6 @@ var BlogAdmin = (function () {
       imgInput.addEventListener('change', function () {
         var file = imgInput.files[0];
         if (!file) return;
-        // Compress image before inserting
         var reader = new FileReader();
         reader.onload = function (e) {
           var img = new Image();
@@ -287,12 +410,14 @@ var BlogAdmin = (function () {
           var previewing = btn.classList.toggle('active');
           if (previewing) {
             textarea.style.display = 'none';
+            btn.textContent = '✎';
             var previewDiv = document.createElement('div');
-            previewDiv.className = 'article-content';
+            previewDiv.className = 'write-preview';
             previewDiv.id = 'editorPreview';
             previewDiv.innerHTML = textarea.value;
             textarea.parentNode.appendChild(previewDiv);
           } else {
+            btn.textContent = '👁';
             textarea.style.display = '';
             var preview = document.getElementById('editorPreview');
             if (preview) preview.remove();
@@ -311,58 +436,58 @@ var BlogAdmin = (function () {
         insertTag(cmd);
       });
 
-	    // Keyboard shortcuts: Ctrl+B (bold), Ctrl+I (italic), Ctrl+K (link), Ctrl+Shift+H (h2)
-	    textarea.addEventListener('keydown', function (e) {
-	      var isCtrl = e.ctrlKey || e.metaKey;
-	      if (!isCtrl) return;
-	      var cmd = null;
-	      if (e.key === 'b') cmd = 'bold';
-	      else if (e.key === 'i') cmd = 'italic';
-	      else if (e.key === 'k') cmd = 'link';
-	      else if (e.key === 'H' || e.key === 'h') {
-	        if (e.shiftKey) cmd = 'h2';
-	      }
-	      if (cmd) {
-	        e.preventDefault();
-	        if (cmd === 'link') {
-	          var url = prompt('Enter link URL:', 'https://');
-	          if (url) insertTag(cmd, url);
-	        } else {
-	          insertTag(cmd);
-	        }
-	      }
-	    });
+      // Keyboard shortcuts
+      textarea.addEventListener('keydown', function (e) {
+        var isCtrl = e.ctrlKey || e.metaKey;
+        if (!isCtrl) return;
+        var cmd = null;
+        if (e.key === 'b') cmd = 'bold';
+        else if (e.key === 'i') cmd = 'italic';
+        else if (e.key === 'k') cmd = 'link';
+        else if (e.key === 'H' || e.key === 'h') {
+          if (e.shiftKey) cmd = 'h2';
+        }
+        if (cmd) {
+          e.preventDefault();
+          if (cmd === 'link') {
+            var url = prompt('Enter link URL:', 'https://');
+            if (url) insertTag(cmd, url);
+          } else {
+            insertTag(cmd);
+          }
+        }
+      });
 
-	    // Auto-replace Markdown on input (#, ##, >, *, -, 1.)
-	    var mdTimer = null;
-	    textarea.addEventListener('input', function () {
-	      clearTimeout(mdTimer);
-	      mdTimer = setTimeout(function () {
-	        var val = textarea.value;
-	        var pos = textarea.selectionStart;
-	        var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
-	        var line = val.substring(lineStart, pos);
+      // Auto-replace Markdown on input
+      var mdTimer = null;
+      textarea.addEventListener('input', function () {
+        clearTimeout(mdTimer);
+        mdTimer = setTimeout(function () {
+          var val = textarea.value;
+          var pos = textarea.selectionStart;
+          var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
+          var line = val.substring(lineStart, pos);
 
-	        var patterns = { '# ': 'h2', '## ': 'h3', '> ': 'blockquote', '* ': 'ul', '- ': 'ul', '1. ': 'ol' };
-	        var tagMap = {
-	          h2: '<h2></h2>', h3: '<h3></h3>', blockquote: '<blockquote></blockquote>',
-	          ul: '\n<ul>\n  <li></li>\n</ul>\n', ol: '\n<ol>\n  <li></li>\n</ol>\n'
-	        };
+          var patterns = { '# ': 'h2', '## ': 'h3', '> ': 'blockquote', '* ': 'ul', '- ': 'ul', '1. ': 'ol' };
+          var tagMap = {
+            h2: '<h2></h2>', h3: '<h3></h3>', blockquote: '<blockquote></blockquote>',
+            ul: '\n<ul>\n  <li></li>\n</ul>\n', ol: '\n<ol>\n  <li></li>\n</ol>\n'
+          };
 
-	        for (var prefix in patterns) {
-	          if (line === prefix) {
-	            var tag = tagMap[patterns[prefix]];
-	            var before = val.substring(0, lineStart);
-	            var after = val.substring(pos);
-	            textarea.value = before + tag + after;
-	            var cursor = before.length + tag.length;
-	            textarea.setSelectionRange(cursor, cursor);
-	            break;
-	          }
-	        }
-	      }, 50);
-	    });
-	    }
+          for (var prefix in patterns) {
+            if (line === prefix) {
+              var tag = tagMap[patterns[prefix]];
+              var before = val.substring(0, lineStart);
+              var after = val.substring(pos);
+              textarea.value = before + tag + after;
+              var cursor = before.length + tag.length;
+              textarea.setSelectionRange(cursor, cursor);
+              break;
+            }
+          }
+        }, 50);
+      });
+    }
 
     function insertTag(cmd, extra) {
       var ta = document.getElementById('editContent');
@@ -396,12 +521,8 @@ var BlogAdmin = (function () {
       ta.setSelectionRange(pos, pos);
     }
 
-    // Back / Cancel
+    // Back
     document.getElementById('editorBack').addEventListener('click', function () {
-      if (formDirty && !confirm(BlogUtils.t('unsavedWarning') + BlogUtils.t('cancel'))) return;
-      showDashboard();
-    });
-    document.getElementById('editorCancel').addEventListener('click', function () {
       if (formDirty && !confirm(BlogUtils.t('unsavedWarning') + BlogUtils.t('cancel'))) return;
       showDashboard();
     });
@@ -409,10 +530,6 @@ var BlogAdmin = (function () {
     // Save
     document.getElementById('editorSave').addEventListener('click', function () {
       var catVal = selectedCat || '';
-      if (catNewWrap && catNewWrap.style.display !== 'none' && catNewWrap.style.display !== '') {
-        var newCat = document.getElementById('editNewCategory');
-        catVal = newCat ? newCat.value.trim() : '';
-      }
 
       var tagStr = document.getElementById('editTags').value.trim();
       var tagArr = tagStr ? tagStr.split(',').map(function (s) { return s.trim(); }).filter(Boolean) : [];
