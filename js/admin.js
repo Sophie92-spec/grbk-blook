@@ -99,7 +99,7 @@ var BlogAdmin = (function () {
     document.getElementById('adminLogoutBtn').addEventListener('click', function () {
       localStorage.removeItem('breeze_admin');
       document.body.classList.remove('admin-mode');
-      showLogin();
+      window.location.href = 'index.html';
     });
 
     document.getElementById('adminSettingsBtn').addEventListener('click', showSettings);
@@ -611,7 +611,7 @@ var BlogAdmin = (function () {
     if (localStorage.getItem('breeze_admin') === 'true') {
       showDashboard();
     } else {
-      showLogin();
+      window.location.href = 'index.html';
     }
   }
 
