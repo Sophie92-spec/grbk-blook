@@ -23,7 +23,7 @@ Sophie 的个人博客 — 纯静态博客系统。
 
 ## 在线使用
 
-打开 [GitHub Pages 链接](https://sophie92-spec.github.io/grbk-blook/) 即可使用。
+点击此链接https://sophie92-spec.github.io/grbk-blook即可使用。
 
 ## 本地使用
 
