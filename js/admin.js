@@ -5,7 +5,7 @@
 var BlogAdmin = (function () {
   'use strict';
 
-  var ADMIN_PASSWORD = localStorage.getItem('breeze_admin_pwd') || 'breeze2026';
+  var ADMIN_PASSWORD = localStorage.getItem('breeze_admin_pwd') || 'dang631..';
   var container = document.getElementById('adminApp');
   if (!container) return {};
 
